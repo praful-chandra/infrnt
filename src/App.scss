@@ -1,0 +1,19 @@
+@import './scss/global';
+@import './scss/variables';
+@import './scss/fonts';
+@import './scss/common.scss';
+
+
+@import './components/Navbar/navbar';
+@import './components/Article/ArticleBig';
+@import './components/Article/ArticleSmall';
+@import './components/Article/ViewArticle.scss';
+@import './components/CuratedStyles/curatedStyles';
+@import "./components/Curator/quickinfo";
+@import "./components//Curator//Profile";
+@import "./components/Curator/StylePage";
+@import "./components/Admin/createBlog";
+@import "./components//Curator/EditStyle";
+@import "./components/Curator/curator";
+
+
