@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
 
 class CuratedStyles extends Component {
   constructor(props) {
@@ -6,6 +7,12 @@ class CuratedStyles extends Component {
 
     this.state = {};
   }
+
+
+  componentDidMount(){
+
+  }
+
   interval = null;
 
   leftSlide = e => {
@@ -21,7 +28,7 @@ class CuratedStyles extends Component {
 
   rightSlide = e => {
     e.persist();
-    
+
     let temp = () => {
       e.target.parentElement.getElementsByTagName("div")[6].scrollBy(2, 0);
     };
@@ -31,72 +38,83 @@ class CuratedStyles extends Component {
     }, 1);
   };
 
-  imgClick = e => {
-    e.persist();
-    //  console.log(e.target.parentElement.offsetLeft);
+  imgClick = (code) => {
+    window.location.replace("/design/"+code);
+
+    
   };
 
   clearInterval = () => {
     clearInterval(this.interval);
   };
 
+  
+
   render() {
     return (
       <div className="curatedStyles-wrapper">
-        {this.props.content.length > 5 ? (
+        {this.props.design && this.props.design.length > 5 ? (
           <i
             className="fas fa-chevron-left curatedStyles-wrapper-slider curatedStyles-wrapper-slider-left"
             onMouseDown={this.leftSlide}
             onMouseUp={this.clearInterval}
           />
         ) : null}
-
         <div className="curatedStyles-curatorInfo-wrapper">
           <div className="curatedStyles-curatorInfo-image">
-            <img
-              src={require("../../images/curator-dp.png")}
+           <a href={`/curator/${this.props.content.curatorCode}`} target="_blank" rel="noopener noreferrer">
+           <img
+              src={this.props.content.curatorAvatar}
               alt="curator dp"
             />
+           </a>
           </div>
-
           <div className="curatedStyles-curatorInfo-details">
             <div className="curatedStyles-curatorInfo-details-title">
-              SRIPRIYA JAIN
+              {this.props.content.name}
             </div>
             <div className="curatedStyles-curatorInfo-details-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at
-              libero suscipit, faucibus diam vel, tristique ex.
+              {this.props.content.description}
             </div>
 
             <div className="curatedStyles-curatorInfo-details-exploreBtn">
-              <a href="/curator/style">Explore this Style</a>
+              <a href={"/style/" + this.props.content.styleCode}>
+                Explore this Style
+              </a>
             </div>
           </div>
         </div>
-        <div className="curatedStyles-wrapper-img-container" id="imgScroller">
-          {this.props.content.map((data, i) => {
-            return (
-              <div
-                key={i}
-                onClick={this.imgClick}
-                className="curatedStyles-wrapper-img-small"
-              >
-                <img src={data.cover} alt="" />
-              </div>
-            );
-          })}
+        <div
+          className="curatedStyles-wrapper-img-container"
+          id="imgScroller"
+        >
+          {this.props.design &&
+            this.props.design.map((data, i) => {
+              return (
+                <div
+                  key={i}
+                  onClick={()=>{this.imgClick(data.designCode)}}
+                  className="curatedStyles-wrapper-img-small"
+                >
+                  <img src={data.coverImg} alt="" />
+                </div>
+              );
+            })}
         </div>
-
-        {this.props.content.length > 5 ? (
+        {this.props.design.length > 5 ? (
           <i
             className="fas fa-chevron-right  curatedStyles-wrapper-slider curatedStyles-wrapper-slider-right"
             onMouseDown={this.rightSlide}
             onMouseUp={this.clearInterval}
           />
-        ) : null}
+        ) : null}{" "}
+        
       </div>
     );
   }
 }
-
-export default CuratedStyles;
+const mapStateToProps = state =>({
+  styles : state.styles,
+  designs : state.designs 
+})
+export default connect(mapStateToProps,{})(CuratedStyles);

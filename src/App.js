@@ -1,67 +1,77 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route,Switch ,Redirect} from "react-router-dom";
+import "./App.scss";
+import {  BrowserRouter as Router,  Route,  Switch} from "react-router-dom";
 import { Provider } from "react-redux";
-import ProtectedRoute from './components/common/ProtectedRoute';
-import classnames  from 'classnames';
+
+
+import 'react-quill/dist/quill.bubble.css';
+import 'react-quill/dist/quill.snow.css';
+
 
 import store from "./store";
 
-import "bootstrap/dist/css/bootstrap.css";
-
-import "./App.scss";
-
 import Navbar from "./components/Navbar/Navbar";
-import CuratorNav from './components/Navbar/CuratorNav';
-import Reports from "./components/Reports";
+import AdminNav from "./components/Navbar/AdminNav";
+import Reports from "./components/reports";
+import viewArticle from "./components/article/ViewArticle";
 import Styles from "./components/Styles";
-import CreateBlog from "./components/Admin/CreateBlog";
-import Curator from "./components/Curator/Curator";
-import ViewArticle from "./components/Article/ViewArticle";
-import CuratorProfile from './components/Curator/Profile';
-import StylePage from './components/Curator/StylePage';
-import CuratorStyles from './components/Curator/CuratorStyles';
-import AddStyle from './components/Curator/AddStyle';
-import EditStyle from './components/Curator/EditStyle'
+import StylePage from "./components/styles/StylePage";
+import Profile from "./components/Curator/Profile";
+import AuthPage from "./components/auth/Auth";
+import DesignPage from "./components/design/designPage";
 
-import User from "./components/users/Users";
-import UserLogin from "./components/users/Login";
+import Admin from "./components/backend/admin/Admin";
+import AdminDashboard from "./components/backend/admin/dashboard/Dashboard";
 
+import WriterAuth from "./components/backend/writer/writerAuth";
+import writerDash from "./components/backend/writer/dashboard/writerDash";
+import AddBlog from "./components/backend/writer/addBlog";
 
+import CuratorAuth from "./components/backend/curator/curatorAuth";
+import CuratorDashboard from "./components/backend/curator/dashboard/dashboard";
+import CuratorStyles from "./components/backend/curator/dashboard/styles";
 
-class App extends Component {
+import tl from "./components/backend/tl/tl";
+import tlDash from "./components/backend/tl/dashboard";
 
-   redirect = ()=>{
-   return <Redirect to="/reports" />
-  }
+export default class App extends Component {
+  
+componentDidMount(){
+
+}
 
   render() {
     return (
       <Provider store={store}>
-          <Router>
-            <div>
-            {!window.location.pathname.includes("curatorb") ? <Navbar /> : <CuratorNav/>} 
+        <Router>
+            {window.location.pathname.includes("/backend") ? <AdminNav /> : <Navbar/>}
+          <Switch>
+            <Route exact path="/" component={Reports} />
+            <Route exact path="/blog" component={Reports} />
+            <Route exact path="/blog/:id" component={viewArticle} />
+            <Route exact path="/styles" component={Styles} />
+            <Route exact path="/style/:id" component={StylePage} />
+            <Route exact path="/curator/:id" component={Profile} />
+            <Route path="/auth" component={AuthPage} />
+            <Route exact path="/design/:id" component={DesignPage} />
 
-              <Route exact path="/" component={this.redirect} />
-              <Route exact path="/reports" component={Reports} />
-              <Route exact path="/styles" component={Styles} />
-              <Route exact path="/curatorb" component={Curator} />
-              <Route exact path="/users/login" component={UserLogin} />
-              <Route exact path="/article/:id" component={ViewArticle}/>
-              <Route exact path="/profile/curator" component={CuratorProfile} />
-              <Route exact path="/curator/style" component={StylePage} />
-              <Switch>
-              <ProtectedRoute exact path="/users" component={User} />
-            <ProtectedRoute exact path="/curatorb/blog" component={CreateBlog} />
-            <ProtectedRoute exact path="/curatorb/styles" component={CuratorStyles} />
-            <ProtectedRoute exact path="/curatorb/styles/add" component={AddStyle} />
-            <ProtectedRoute exact path="/curatorb/styles/edit/:styleId" component={EditStyle} />
+            <Route exact path="/backend/admin" component={Admin} />
+            <Route exact path="/backend/admin/dashboard"  component={AdminDashboard} />
 
-            </Switch>
-            </div>
-          </Router>
+            <Route exact path="/backend/writer" component={WriterAuth} />
+            <Route exact path="/backend/writer/dashboard" component={writerDash} />
+            <Route exact path="/backend/writer/addblog" component={AddBlog} />
+
+            <Route exact path="/backend/curator" component={CuratorAuth} />
+            <Route exact path="/backend/curator/dashboard" component={CuratorDashboard} />
+            <Route exact path="/backend/curator/styles" component={CuratorStyles} />
+
+            <Route exact path="/backend/tl" component={tl} />
+            <Route exact path="/backend/tl/dashboard" component={tlDash} />
+          </Switch>
+
+        </Router>
       </Provider>
     );
   }
 }
-
-export default App;

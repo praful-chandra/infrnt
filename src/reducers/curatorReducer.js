@@ -1,56 +1,114 @@
 import {
-  GET_CURATOR_STYLES,
+  GET_ALL_CURATORS,
   CURATOR_LOAD,
-  GET_CURATOR_STYLE_DESIGN,
-  GET_STYLE,
-  GET_STYLE_DESIGN
+  CURATOR_ERROR,
+  GET_CURATOR_BY_CODE,
+  CURATOR_LOGIN,
+  SET_CURATOR,
+  LOGOUT_CURATOR,
+  UPDATE_CURATOR,
+  GET_CURATOR_STYLES,
+GET_CURATOR_DESIGNS
 } from "../actions/types";
 
 const initialState = {
-  curatorStyles: null,
-  curatorStyleDesigns: null,
-  isCuratorLoading: false,
-  style : null,
-  styleDesign : null
+  curatorLoading: false,
+  allCurator: [],
+  selectedCurator: null,
+  curatorError: null,
+  isAuthenticated: false,
+  curator: null,
+  myStyles : null,
+  myDesigns : null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case CURATOR_LOAD:
+    case CURATOR_LOAD: {
       return {
         ...state,
-        isCuratorLoading: true
+        curatorLoading: true
       };
+    }
 
-    case GET_CURATOR_STYLES:
+    case CURATOR_LOGIN: {
       return {
         ...state,
-        curatorStyles: action.payload,
-        isCuratorLoading: false
+        curatorLoading: false,
+        isAuthenticated: true,
+        curator: action.payload
       };
-
-    case GET_CURATOR_STYLE_DESIGN:
+    }
+    case SET_CURATOR: {
       return {
         ...state,
-        curatorStyleDesigns: action.payload,
-        isCuratorLoading: false
+        curator: action.payload,
+        curatorLoading: false,
+        isAuthenticated: true,
+        curatorDesigns : []
       };
+    }
 
-      case GET_STYLE :return{
-          ...state,
-            style : action.payload,
-            isCuratorLoading: false
+    case GET_ALL_CURATORS: {
+      return {
+        ...state,
+        allCurator: action.payload,
+        curatorLoading: false
+      };
+    }
+
+    case GET_CURATOR_BY_CODE: {
+      return {
+        ...state,
+        curatorLoading: false,
+        selectedCurator: action.payload
+      };
+    }
+
+    case CURATOR_ERROR: {
+      return {
+        ...state,
+        curatorLoading: false,
+        curatorError: action.payload
+      };
+    }
+
+    case LOGOUT_CURATOR: {
+      return {
+        ...state,
+        curator: null,
+        curatorLoading: false,
+        isAuthenticated: false,
+        curatorError: null
+      };
+    }
+
+    case UPDATE_CURATOR:{
+        return{
+            ...state,
+            curator : action.payload,
+            curatorLoading : false
+        }
+    }
+
+    case GET_CURATOR_STYLES:{      
+      return{
+        ...state,
+        myStyles : action.payload,
+        curatorLoading : false
       }
-      
-      case GET_STYLE_DESIGN : return {
+    }
+    
+    case GET_CURATOR_DESIGNS:{
+      return{
         ...state,
-        styleDesign: action.payload,
-            isCuratorLoading: false
+        myDesigns : action.payload,
+        curatorLoading : false
       }
+    }
 
-    default:
+    default: {
       return state;
+    }
   }
 };
-
-

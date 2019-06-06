@@ -1,63 +1,50 @@
-import {
-  UPLOAD_BLOG,
-  GET_CURATOR_BLOGS,
-  GET_ALL_BLOGS,
-  GET_SELECTED_BLOGS,
-  BLOG_ERROR,
-  BLOG_LOAD
-} from "../actions/types";
+import {GET_BLOG_BY_CODE,BLOG_LOADING,BLOG_ERROR,GET_ALL_BLOGS} from "../actions/types";
 
 const initialState = {
-  CuratorBlogs: null,
-  UploadBlog: null,
-  allBlogs: null,
-  selectedBlog: null,
-  blogError: null,
-  blogLoading: false
+  blogLoading: false,
+  allBlogs :[],
+  selectedBlog : null,
+  blogError : null
+ 
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case BLOG_LOAD:
-      return {
-        ...state,
-        blogLoading: true
-      };
 
-    case UPLOAD_BLOG:
-      return {
-        ...state,
-        UploadBlog: action.payload,
-        blogLoading: false
-      };
+case BLOG_LOADING :{
+  return {
+    ...state,
+    blogLoading : true
+  }
+}
 
-    case GET_CURATOR_BLOGS:
-      return {
-        ...state,
-        CuratorBlogs: action.payload,
-        blogLoading: false
-      };
+    case GET_BLOG_BY_CODE :{
 
-    case GET_ALL_BLOGS:
       return {
         ...state,
-        allBlogs: action.payload,
-        blogLoading: false
-      };
-    case GET_SELECTED_BLOGS:
-      return {
-        ...state,
-        selectedBlog: action.payload,
-        blogLoading: false
-      };
+        selectedBlog : action.payload,
+        blogLoading : false,
+        blogError : null
+      }
+    }
 
-    case BLOG_ERROR:
+    case GET_ALL_BLOGS :{
       return {
         ...state,
-        blogError: action.payload,
-        blogLoading: false
-      };
+        blogLoading : false,
+        allBlogs : action.payload,
+        blogError : null
+      }
+    }
 
+    case BLOG_ERROR :{
+      return {
+        ...state,
+        blogLoading : false,
+        blogError : action.payload
+      }
+    }
+    
     default:
       return state;
   }

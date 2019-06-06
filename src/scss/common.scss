@@ -70,3 +70,26 @@
     padding-top: 1rem;
     cursor: pointer;
 }
+
+.bigger{
+    font-Size: 2rem;
+}
+
+.loading{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    left: 0;
+    z-index: 10000;  
+    top:-12rem;
+    background-color: #fff;
+&>img{
+    left: 66rem;
+    position: relative;
+}
+    &>*{
+        width: 30%;
+        margin: 0 auto;
+        text-align: center;
+    }
+}

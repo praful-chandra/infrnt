@@ -1,8 +1,11 @@
 import React from 'react'
 
 export default function Loading() {
-    const loading = require('../../images/loading.gif');
+  return (
+    <div className="loading">
+        <img src={require("../../images/loading1.gif")} alt=""/>
 
-    return( <img src={loading} className="loading" alt=""/> )
-  
+            <h1>LOADING ...</h1>
+    </div>
+  )
 }

@@ -1,134 +1,106 @@
 import React, { Component } from "react";
-
+import {connect} from 'react-redux';
 import CuratedStyles from "./CuratedStyles/CuratedStyles";
 import CuratedStylesContainer from "./CuratedStyles/CuratedStylesContainer";
 import QuickInfo from "./Curator/QuickInfo";
 
-const demoStyle = [
-  {
-    cover: require("../images/article-big-cover.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-2.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-3.png"),
-    title: "Style1"
-  },
-  {
-    cover: require("../images/article-small-1.png"),
-    title: "Style1"
-  }
-];
+import {getAllStyles} from "../actions/styleActions";
+import {getAllDesigns} from "../actions/designActions";
+
 
 class Styles extends Component {
-  render() {
-    return (
-      <div>
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
 
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
+constructor(props) {
+  super(props)
 
-        <QuickInfo />
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-
-        <QuickInfo />
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-
-        <CuratedStylesContainer containerHeader=" " containerFooter="none">
-          <CuratedStyles content={demoStyle} />
-        </CuratedStylesContainer>
-      </div>
-    );
+  this.state = {
+     allStyles:[],
+     allDesigns:[]
   }
 }
 
-export default Styles;
+
+
+
+  componentDidMount(){
+    
+this.props.getAllStyles();
+this.props.getAllDesigns();
+
+ 
+  }
+
+  componentWillReceiveProps(nextProps){
+
+    if(nextProps.styles && !nextProps.styles.styleLoading)
+    this.setState({
+      allStyles : nextProps.styles.allStyles
+    })
+
+    if(nextProps.designs && !nextProps.designs.designLoading)
+    this.setState({
+      allDesigns : nextProps.designs.allDesigns
+    })
+  }
+
+
+
+
+  render() {
+
+    
+
+    return(
+      <>
+
+      {this.state.allStyles.map((style,i)=>{
+
+        let styleDesigns = []
+        this.state.allDesigns.filter(design=>{
+          if(design.styleCode === style.styleCode){
+            styleDesigns.push(design)
+          }
+          return null
+        })
+
+        
+        
+        return(
+          <CuratedStylesContainer containerHeader=" " key={`style${i}`} containerFooter="none">
+   <CuratedStyles content={style} design={styleDesigns} />
+    </CuratedStylesContainer>
+        )
+      })}
+
+      {/* <CuratedStylesContainer containerHeader=" " containerFooter="none" key={this.data._id}>
+   <CuratedStyles content={this.data} design={this.design} />
+    </CuratedStylesContainer>
+
+    <CuratedStylesContainer containerHeader=" " containerFooter="none" key={this.data._id}>
+   <CuratedStyles content={this.data} design={this.design} />
+    </CuratedStylesContainer>
+
+      <QuickInfo />
+
+    <CuratedStylesContainer containerHeader=" " containerFooter="none" key={this.data._id}>
+   <CuratedStyles content={this.data} design={this.design} />
+    </CuratedStylesContainer>
+
+    <CuratedStylesContainer containerHeader=" " containerFooter="none" key={this.data._id}>
+   <CuratedStyles content={this.data} design={this.design} />
+    </CuratedStylesContainer> */}
+
+    {/* <QuickInfo /> */}
+      </>
+    )
+  }
+}
+
+const mapStateToProps = (state)=>(
+  {
+    styles : state.styles,
+    designs : state.designs
+  }
+)
+
+export default connect(mapStateToProps,{getAllStyles,getAllDesigns})(Styles);
