@@ -2,8 +2,9 @@
 
 
 
-## FRONT END UI
-the frontend ui can be found in the Xd file.
+
+
+
 
 ### `npm start`
 
